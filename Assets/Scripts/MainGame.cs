@@ -1,38 +1,40 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class MainGame : MonoBehaviour {
 
 	public float timeToKillinSeconds = 10f;
-	
-	private player _playerData;
-	private Sliders obs;
-	private SliderLauncher sl;
-	
+
+
+	private Active _active;
+	private Sliders _obs;
+	private SliderLauncher _sl;
+
 	// Use this for initialization
 	void Start () {
-		_playerData = Camera.main.GetComponent<player>();
-		GameObject obsObj = GameObject.FindGameObjectWithTag("Slider");
-		obs = obsObj.GetComponent<Sliders>();
+		_active = Camera.main.GetComponent<Active>();
+		GameObject _obsObj = GameObject.FindGameObjectWithTag("Slider");
+		_obs = _obsObj.GetComponent<Sliders>();
 		GameObject scriptHolder = GameObject.FindGameObjectWithTag("Script Holder");
-		sl = scriptHolder.GetComponent<SliderLauncher>();
+		_sl = scriptHolder.GetComponent<SliderLauncher>();
 	}
 
 	void Update () {
-		if(_playerData.getAllContactPointsHit())
+		if(_active.getAllContactPointsHit())
 			timeToKillinSeconds -= 0.1f;
-		if(sl.allSlidersDead())
-			sl.launchRandomSlider();
+		if(_sl.allSlidersDead())
+			_sl.launchRandomSlider();
 		
 		
 		if(timeToKillinSeconds < 0f){
-			obs.die();
+			_obs.die();
 			timeToKillinSeconds = 10f;
-			_playerData.setAllContactPointsHit(false);
+			_active.setAllContactPointsHit(false);
 		}
 		
-		if(!obs.isAlive()){
-			sl.launchRandomSlider();
+		if(!_obs.isAlive()){
+			_sl.launchRandomSlider();
 		}
 	}
 }

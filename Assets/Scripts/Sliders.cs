@@ -1,19 +1,36 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Sliders : MonoBehaviour {
 
 	public float slideUpwardSpeed = 1.0f;
 	public float rotateSpeed = 1.0f;
-
+	
 	private bool alive;
 	private Vector3 limbo = new Vector3(999f, 999f, -10);
+	private int _numOfContactPoints = 0;
+	private Active active;
+	List<GameObject> cpHits = new List<GameObject>();
+	private Color[] colors = { Color.red, Color.green, Color.blue, Color.white, Color.yellow };
+	private int currColor;
 
 	void Start () {
+		currColor = Random.Range(0, colors.Length-1);
+		active = Camera.main.GetComponent<Active>();
 		foreach(Transform tran in transform){
-			if(tran.name == "Fuck Machine"){
-				tran.renderer.material.color = Color.green;
+			int i = 0;
+			if(tran.tag == "Block"){
+				tran.renderer.material.color = colors[currColor];
 			}
+			if(tran.tag == "Contact"){
+				ContactPoint cpt = tran.GetComponent<ContactPoint>();
+				cpt.setContactIndex(i);
+				i++;
+				_numOfContactPoints++;
+			}
+			if(shouldDie())
+				die();
 		}
 		alive = true;
 	}
@@ -27,8 +44,15 @@ public class Sliders : MonoBehaviour {
 	}
 	
 	public void spawn(Vector3 pos){
-		if(!alive)
+		if(!alive){
+			currColor = Random.Range(0, colors.Length-1);
+			foreach(Transform tran in transform){
+				if(tran.tag == "Block"){
+					tran.renderer.material.color = colors[currColor];
+				}
+			}
 			alive = true;
+		}
 		transform.position = pos;
 	}
 	
@@ -55,7 +79,27 @@ public class Sliders : MonoBehaviour {
 		else
 			return false;
 	}
-	
+
+	public int getNumOfContactPoints(){
+		return _numOfContactPoints;
+	}
+
+	private bool shouldDie(){
+		RaycastHit[] hits = active.getHits();
+		if(hits != null && hits.Length > 0){
+			foreach(RaycastHit hit in hits){
+				if(hit.transform.tag == "Contact" && !cpHits.Contains(hit.transform.gameObject))
+						cpHits.Add(hit.transform.gameObject);
+				
+			}
+		}
+		if(cpHits.Count == getNumOfContactPoints()){
+			return true;
+		}
+		return false;
+
+	}
+
 	private IEnumerator wait(float seconds){
 		yield return new WaitForSeconds(seconds);
 	}

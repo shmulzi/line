@@ -3,12 +3,12 @@ using System.Collections;
 
 public class DebugGUI : MonoBehaviour {
 
-	private player _playerData;
+	private Active _playerData;
 	private Sliders obs;
 
 	// Use this for initialization
 	void Start () {
-		_playerData = Camera.main.GetComponent<player>();
+		_playerData = Camera.main.GetComponent<Active>();
 		GameObject obsObj = GameObject.FindGameObjectWithTag("Slider");
 		obs = obsObj.GetComponent<Sliders>();
 	}
