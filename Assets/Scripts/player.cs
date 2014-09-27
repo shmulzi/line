@@ -18,8 +18,7 @@ public class player : MonoBehaviour {
 		_line = _lineObj.GetComponent<LineRenderer>();
 		fingerFrame *= Screen.width;
 	}
-	
-	// Update is called once per frame
+
 	void Update () {
 		
 		if(Input.touches.Length > 1){

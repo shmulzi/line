@@ -7,19 +7,23 @@ public class MainGame : MonoBehaviour {
 	
 	private player _playerData;
 	private Sliders obs;
+	private SliderLauncher sl;
 	
 	// Use this for initialization
 	void Start () {
 		_playerData = Camera.main.GetComponent<player>();
-		GameObject obsObj = GameObject.FindGameObjectWithTag("Obstacle");
+		GameObject obsObj = GameObject.FindGameObjectWithTag("Slider");
 		obs = obsObj.GetComponent<Sliders>();
+		GameObject scriptHolder = GameObject.FindGameObjectWithTag("Script Holder");
+		sl = scriptHolder.GetComponent<SliderLauncher>();
 	}
-	
-	// Update is called once per frame
+
 	void Update () {
-		if(_playerData.getAllContactPointsHit()){
+		if(_playerData.getAllContactPointsHit())
 			timeToKillinSeconds -= 0.1f;
-		}
+		if(sl.allSlidersDead())
+			sl.launchRandomSlider();
+		
 		
 		if(timeToKillinSeconds < 0f){
 			obs.die();
@@ -28,7 +32,7 @@ public class MainGame : MonoBehaviour {
 		}
 		
 		if(!obs.isAlive()){
-			obs.spawn();
+			sl.launchRandomSlider();
 		}
 	}
 }
