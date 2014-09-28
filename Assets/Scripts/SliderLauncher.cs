@@ -70,8 +70,8 @@ public class SliderLauncher : MonoBehaviour {
 	}
 
 	public void launchRandomSlider(){
-		int rand = Random.Range(0, sliders.Length-1);
-		float randSpeed = Random.Range(10f,35f);
+		int rand = Random.Range(0, sliders.Length);
+		float randSpeed = Random.Range(20f,30f);
 		float randRotation = Random.Range(-30f,30f);
 		launchSlider(rand, randSpeed, randRotation);
 	}

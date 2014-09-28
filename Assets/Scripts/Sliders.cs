@@ -8,10 +8,10 @@ public class Sliders : MonoBehaviour {
 	public float rotateSpeed = 1.0f;
 	
 	private bool alive;
-	private Vector3 limbo = new Vector3(999f, 999f, -10);
+	private Vector3 limbo = new Vector3(-999f, -999f, -10);
 	private int _numOfContactPoints = 0;
 	private Active active;
-	List<GameObject> cpHits = new List<GameObject>();
+	private List<GameObject> cpHits = new List<GameObject>();
 	private Color[] colors = { Color.red, Color.green, Color.blue, Color.white, Color.yellow };
 	private int currColor;
 
@@ -29,10 +29,8 @@ public class Sliders : MonoBehaviour {
 				i++;
 				_numOfContactPoints++;
 			}
-			if(shouldDie())
-				die();
 		}
-		alive = true;
+		alive = false;
 	}
 	
 	void Update () {
@@ -41,6 +39,9 @@ public class Sliders : MonoBehaviour {
 		if(!alive && transform.position != limbo){
 			transform.position = limbo;
 		}
+		
+		if(shouldDie())
+			die();
 	}
 	
 	public void spawn(Vector3 pos){
@@ -57,8 +58,10 @@ public class Sliders : MonoBehaviour {
 	}
 	
 	public void die(){
-		if(alive)
+		if(alive){
 			alive = false;
+			active.resetHits();
+		}
 	}
 
 	public void setSlideSpeed(float s){
@@ -94,13 +97,9 @@ public class Sliders : MonoBehaviour {
 			}
 		}
 		if(cpHits.Count == getNumOfContactPoints()){
+			cpHits.Clear();
 			return true;
 		}
 		return false;
-
-	}
-
-	private IEnumerator wait(float seconds){
-		yield return new WaitForSeconds(seconds);
 	}
 }
