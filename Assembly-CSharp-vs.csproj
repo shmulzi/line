@@ -49,9 +49,12 @@
      <Compile Include="Assets\Scripts\Active.cs" />
      <Compile Include="Assets\Scripts\ContactPoint.cs" />
      <Compile Include="Assets\Scripts\DebugGUI.cs" />
+     <Compile Include="Assets\Scripts\LevelLoader.cs" />
      <Compile Include="Assets\Scripts\MainGame.cs" />
      <Compile Include="Assets\Scripts\SliderLauncher.cs" />
      <Compile Include="Assets\Scripts\Sliders.cs" />
+     <Compile Include="Assets\Scripts\TouchMarker.cs" />
+     <Compile Include="Assets\Scripts\TouchMarkerDispenser.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

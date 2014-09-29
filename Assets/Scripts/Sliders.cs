@@ -14,6 +14,7 @@ public class Sliders : MonoBehaviour {
 	private List<GameObject> cpHits = new List<GameObject>();
 	private Color[] colors = { Color.red, Color.green, Color.blue, Color.white, Color.yellow };
 	private int currColor;
+	private List<ContactPoint> contactPoints = new List<ContactPoint>();
 
 	void Start () {
 		currColor = Random.Range(0, colors.Length-1);
@@ -28,6 +29,7 @@ public class Sliders : MonoBehaviour {
 				cpt.setContactIndex(i);
 				i++;
 				_numOfContactPoints++;
+				contactPoints.Add(cpt);
 			}
 		}
 		alive = false;
@@ -40,8 +42,10 @@ public class Sliders : MonoBehaviour {
 			transform.position = limbo;
 		}
 		
-		if(shouldDie())
+		if(shouldDie()){
 			die();
+			resetContactPoints();
+		}
 	}
 	
 	public void spawn(Vector3 pos){
@@ -75,6 +79,7 @@ public class Sliders : MonoBehaviour {
 	public bool isAlive(){
 		return alive;
 	}
+	
 
 	public bool isBeforeHalfOfScreen(){
 		if(transform.position.y <= Screen.height/16)
@@ -91,15 +96,25 @@ public class Sliders : MonoBehaviour {
 		RaycastHit[] hits = active.getHits();
 		if(hits != null && hits.Length > 0){
 			foreach(RaycastHit hit in hits){
-				if(hit.transform.tag == "Contact" && !cpHits.Contains(hit.transform.gameObject))
-						cpHits.Add(hit.transform.gameObject);
-				
+				if(hit.transform.tag == "Contact"){
+					ContactPoint cp = hit.transform.GetComponent<ContactPoint>();
+					cp.touching(true);
+				}
 			}
 		}
-		if(cpHits.Count == getNumOfContactPoints()){
-			cpHits.Clear();
-			return true;
+		foreach(ContactPoint cp in contactPoints){
+			if(!cp.isTouched()){
+				return false;
+			}
 		}
-		return false;
+		return true;
 	}
+
+	private void resetContactPoints(){
+		foreach(ContactPoint cp in contactPoints){
+			cp.touching(false);
+		}
+	}
+
+
 }
