@@ -5,6 +5,7 @@ public class ContactPoint : MonoBehaviour {
 
 	private int _contactIndex;
 	private bool _isBeingTouched;
+	private bool _marked = false;
 	private TouchMarkerDispenser markDispenser;
 
 	void Start () {
@@ -14,15 +15,8 @@ public class ContactPoint : MonoBehaviour {
 	}
 
 	public void touching(bool b){
-		if(b){
-			GameObject mark = markDispenser.dispenseMarker();
-			mark.transform.parent = transform;
-		} else {
-			TouchMarker currMarker = gameObject.GetComponentInChildren<TouchMarker>();
-			transform.DetachChildren();
-			currMarker.deactivate();	
-		}
 		_isBeingTouched = b;
+		shouldAttachMarker(b);
 	}
 
 	public bool isTouched(){
@@ -35,5 +29,27 @@ public class ContactPoint : MonoBehaviour {
 
 	public int getContactIndex(){
 		return _contactIndex;
+	}
+
+	public void deatchMarker(){
+		if(transform.childCount > 0){
+			Transform currMarker = transform.GetChild(0);
+			TouchMarker currMarkerScript = currMarker.GetComponentInChildren<TouchMarker>();
+			currMarker.transform.parent = null;
+			currMarker.transform.position = markDispenser.markerPool;
+			currMarkerScript.deactivate();
+		}
+	}
+
+	private void shouldAttachMarker(bool b){
+		if(b && !_marked){
+			Transform mark = markDispenser.dispenseMarker();
+			if(mark != null){
+				mark.transform.position = transform.position;
+				mark.transform.parent = transform;
+				_marked = true;
+			}
+		} 
+
 	}
 }

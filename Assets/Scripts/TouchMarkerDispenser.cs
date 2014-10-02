@@ -8,7 +8,6 @@ public class TouchMarkerDispenser : MonoBehaviour {
 
 	private List<TouchMarker> markerScripts = new List<TouchMarker>();
 
-	// Use this for initialization
 	void Start () {
 		GameObject[] markers = GameObject.FindGameObjectsWithTag("Touch Marker");
 		foreach(GameObject marker in markers){
@@ -21,18 +20,18 @@ public class TouchMarkerDispenser : MonoBehaviour {
 		//check if marker is alive and if not send to pool
 		foreach(TouchMarker marker in markerScripts){
 			if(!marker.isActivated()){
-				marker.transform.parent.transform.position = markerPool;
+				marker.transform.position = markerPool;
 			}
 		}
 	}
 
-	public GameObject dispenseMarker(){
+	public Transform dispenseMarker(){
 		foreach(TouchMarker marker in markerScripts){
 			if(!marker.isActivated()){
 				marker.activate();
-				return marker.transform.gameObject;
+				return marker.transform;
 			}
 		}
-		return new GameObject();
+		return null;
 	}
 }

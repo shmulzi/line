@@ -18,6 +18,12 @@ public class DebugGUI : MonoBehaviour {
 	}
 	
 	void OnGUI(){
+//		RaycastHit[] hits = _active.getHits();
+//		string hitStrings = "";
+//		foreach(RaycastHit hit in hits){
+//			hitStrings += hit.transform.name;
+//		}
+//		GUI.Label(new Rect(0,0,100,100),hitStrings);
 //		GUI.Label(new Rect(0,0,200,100),"F1: " + _active.getTouch(0).ToString());
 //		GUI.Label(new Rect(0,20,200,100),"F2: " + _active.getTouch(1).ToString());
 //		GUI.Label(new Rect(0,40,200,100),"Slider: " + obs.transform.position.ToString());

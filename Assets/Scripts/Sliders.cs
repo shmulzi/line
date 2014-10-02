@@ -113,6 +113,7 @@ public class Sliders : MonoBehaviour {
 	private void resetContactPoints(){
 		foreach(ContactPoint cp in contactPoints){
 			cp.touching(false);
+			cp.deatchMarker();
 		}
 	}
 

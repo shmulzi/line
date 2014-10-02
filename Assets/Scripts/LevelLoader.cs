@@ -11,10 +11,10 @@ public class LevelLoader : MonoBehaviour {
 	void Awake () {
 		foreach(GameObject slider in sliders){
 			Instantiate(slider, pool, Quaternion.identity);
-			Sliders sliderScript = slider.GetComponent<Sliders>();
-			for(int i = 0; i <= sliderScript.getNumOfContactPoints(); i++){
-				Instantiate(touchMarker,pool,Quaternion.identity);
-			}
+		}
+		GameObject[] cpObjs = GameObject.FindGameObjectsWithTag("Contact");
+		for(int i = 0; i < cpObjs.Length; i++){
+			Instantiate(touchMarker,pool,Quaternion.identity);
 		}
 		loadingDone = true;
 	}
