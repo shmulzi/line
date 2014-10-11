@@ -10,6 +10,11 @@ public class SliderLauncher : MonoBehaviour {
 
 	public float spawnPointOffset = 50f;
 	public float killOffScreenOffset = 50f;
+	public float randomSpeedRangeMin = 20f;
+	public float randomSpeedRangeMax = 30f;
+	public float randomRotateRangeMin = -30f;
+	public float randomRotateRangeMax = 30f;
+
 
 	void Start () {
 		sliders = GameObject.FindGameObjectsWithTag("Slider");
@@ -71,14 +76,14 @@ public class SliderLauncher : MonoBehaviour {
 
 	public void launchRandomSlider(){
 		int rand = Random.Range(0, sliders.Length);
-		float randSpeed = Random.Range(20f,30f);
-		float randRotation = Random.Range(-30f,30f);
+		float randSpeed = Random.Range(randomSpeedRangeMin,randomSpeedRangeMax);
+		float randRotation = Random.Range(randomRotateRangeMin,randomRotateRangeMax);
 		launchSlider(rand, randSpeed, randRotation);
 	}
 
 	public void launchRandomSlider(float speed){
 		int rand = Random.Range(0, sliders.Length-1);
-		float randRotation = Random.Range(-30f,30f);
+		float randRotation = Random.Range(randomRotateRangeMin,randomRotateRangeMax);
 		launchSlider(rand, speed, randRotation);
 	}
 

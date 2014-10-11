@@ -47,14 +47,22 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\Active.cs" />
-     <Compile Include="Assets\Scripts\ContactPoint.cs" />
+     <Compile Include="Assets\Scripts\ColorSwitcher.cs" />
      <Compile Include="Assets\Scripts\DebugGUI.cs" />
+     <Compile Include="Assets\Scripts\FingerMarker.cs" />
+     <Compile Include="Assets\Scripts\Hitter.cs" />
      <Compile Include="Assets\Scripts\LevelLoader.cs" />
+     <Compile Include="Assets\Scripts\LineHitPoint.cs" />
      <Compile Include="Assets\Scripts\MainGame.cs" />
+     <Compile Include="Assets\Scripts\SimpleAnim.cs" />
      <Compile Include="Assets\Scripts\SliderLauncher.cs" />
      <Compile Include="Assets\Scripts\Sliders.cs" />
+     <Compile Include="Assets\Scripts\Timer.cs" />
      <Compile Include="Assets\Scripts\TouchMarker.cs" />
      <Compile Include="Assets\Scripts\TouchMarkerDispenser.cs" />
+     <Compile Include="Assets\Tests\ActiveTester.cs" />
+     <Compile Include="Assets\Tests\LinePointHitTester.cs" />
+     <Compile Include="Assets\Tests\TimerTester.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -4,18 +4,22 @@ using System.Collections.Generic;
 
 public class Active : MonoBehaviour {
 
+	private bool _lineLock = false;
+	private Timer _timer;
 	private GameObject _lineObj;
 	private LineRenderer _line;
 	private Vector3 _p0, _p1;
-	private RaycastHit[] _hits;
+
+	public static RaycastHit[] _hits;
 
 	void Start () {
 		_lineObj = GameObject.FindGameObjectWithTag("Line");
 		_line = _lineObj.GetComponent<LineRenderer>();
+		_timer = GetComponent<Timer>();
 	}
 
 	void Update () {
-		if(Input.touches.Length > 1){
+		if(Input.touches.Length > 1 && !Hitter.blocked && !_lineLock){
 			RaycastHit hit;
 			_p0 = Camera.main.ScreenToWorldPoint(Input.touches[0].position);
 			_p1 = Camera.main.ScreenToWorldPoint(Input.touches[1].position);
@@ -25,7 +29,12 @@ public class Active : MonoBehaviour {
 		} else {
 			_line.SetPosition(0, new Vector2(-999f,-999f));
 			_line.SetPosition(1, new Vector2(-999f,-999f));
+			_p0 = new Vector3(999,-999,0);
+			_p1 = new Vector3(999,-999,0);
+
 		}
+		if(!_lineLock)
+			lockDrawLine();
 	}
 	
 	public Vector3 getTouch(int i){
@@ -40,7 +49,19 @@ public class Active : MonoBehaviour {
 		return _hits;
 	}
 
-	public void resetHits(){
+	public static void resetHits(){
 		_hits = null;
+	}
+
+	private void lockDrawLine(){
+		StartCoroutine(wait (1));
+	}
+
+	private IEnumerator wait(float seconds){
+		if(Hitter.blocked){
+			_lineLock = true;
+			yield return new WaitForSeconds(seconds);
+			_lineLock = false;
+		}
 	}
 }

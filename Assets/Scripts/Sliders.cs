@@ -6,42 +6,36 @@ public class Sliders : MonoBehaviour {
 
 	public float slideUpwardSpeed = 1.0f;
 	public float rotateSpeed = 1.0f;
+	public Vector3 limbo = new Vector3(-999f, -999f, -10);
 	
-	private bool alive;
-	private Vector3 limbo = new Vector3(-999f, -999f, -10);
+	private bool _alive;
+	private ColorSwitcher _cSwitcher;
 	private int _numOfContactPoints = 0;
-	private Active active;
-	private List<GameObject> cpHits = new List<GameObject>();
-	private Color[] colors = { Color.red, Color.green, Color.blue, Color.white, Color.yellow };
-	private int currColor;
-	private List<ContactPoint> contactPoints = new List<ContactPoint>();
-
-	void Start () {
-		currColor = Random.Range(0, colors.Length-1);
-		active = Camera.main.GetComponent<Active>();
+	private List<GameObject> _contactPointObjs = new List<GameObject>();
+		
+	void Awake () {
+		_cSwitcher = GetComponent<ColorSwitcher>();
+		int i = 0;
 		foreach(Transform tran in transform){
-			int i = 0;
-			if(tran.tag == "Block"){
-				tran.renderer.material.color = colors[currColor];
-			}
 			if(tran.tag == "Contact"){
-				ContactPoint cpt = tran.GetComponent<ContactPoint>();
-				cpt.setContactIndex(i);
-				i++;
-				_numOfContactPoints++;
-				contactPoints.Add(cpt);
+				LineHitPoint cpt = tran.GetComponent<LineHitPoint>();
+				if(cpt != null){
+					cpt.setLHPIndex(i);
+					i++;
+					_numOfContactPoints++;
+					_contactPointObjs.Add(tran.gameObject);
+				}
 			}
 		}
-		alive = false;
+		_alive = false;
 	}
 	
 	void Update () {
-		transform.Translate(Vector3.up * Time.deltaTime * slideUpwardSpeed, Space.World);
-		transform.Rotate(Vector3.forward * rotateSpeed * Time.deltaTime);
-		if(!alive && transform.position != limbo){
+		slideTo(Vector3.up, slideUpwardSpeed);
+		rotate(rotateSpeed);
+		if(!_alive && transform.position != limbo){
 			transform.position = limbo;
 		}
-		
 		if(shouldDie()){
 			die();
 			resetContactPoints();
@@ -49,22 +43,17 @@ public class Sliders : MonoBehaviour {
 	}
 	
 	public void spawn(Vector3 pos){
-		if(!alive){
-			currColor = Random.Range(0, colors.Length-1);
-			foreach(Transform tran in transform){
-				if(tran.tag == "Block"){
-					tran.renderer.material.color = colors[currColor];
-				}
-			}
-			alive = true;
+		if(!_alive){
+			_alive = true;
 		}
 		transform.position = pos;
+		_cSwitcher.unlockColorChange();
 	}
 	
 	public void die(){
-		if(alive){
-			alive = false;
-			active.resetHits();
+		if(_alive){
+			_alive = false;
+			Active.resetHits();
 		}
 	}
 
@@ -77,15 +66,7 @@ public class Sliders : MonoBehaviour {
 	}
 	
 	public bool isAlive(){
-		return alive;
-	}
-	
-
-	public bool isBeforeHalfOfScreen(){
-		if(transform.position.y <= Screen.height/16)
-			return true;
-		else
-			return false;
+		return _alive;
 	}
 
 	public int getNumOfContactPoints(){
@@ -93,29 +74,27 @@ public class Sliders : MonoBehaviour {
 	}
 
 	private bool shouldDie(){
-		RaycastHit[] hits = active.getHits();
-		if(hits != null && hits.Length > 0){
-			foreach(RaycastHit hit in hits){
-				if(hit.transform.tag == "Contact"){
-					ContactPoint cp = hit.transform.GetComponent<ContactPoint>();
-					cp.touching(true);
-				}
-			}
-		}
-		foreach(ContactPoint cp in contactPoints){
-			if(!cp.isTouched()){
+		foreach(GameObject o in _contactPointObjs.ToArray()){
+			LineHitPoint cp = o.GetComponent<LineHitPoint>();
+			if(!cp.getSignal()){
 				return false;
 			}
 		}
-		return true;
+		return true;	
 	}
 
 	private void resetContactPoints(){
-		foreach(ContactPoint cp in contactPoints){
-			cp.touching(false);
-			cp.deatchMarker();
-		}
+		foreach(GameObject o in _contactPointObjs.ToArray()){
+			LineHitPoint cp = o.GetComponent<LineHitPoint>();
+			cp.resetSignal();
+		} 
 	}
 
+	private void slideTo(Vector3 dir, float speed){
+		transform.Translate(dir * Time.deltaTime * speed, Space.World);
+	}
 
+	private void rotate(float speed){
+		transform.Rotate(Vector3.forward * speed * Time.deltaTime);
+	}
 }
