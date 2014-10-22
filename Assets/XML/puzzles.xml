@@ -1,0 +1,8 @@
+<Puzzles>
+	<Puzzle type=fourSquares name=CrissCross>
+		<topLeft>1</topLeft>
+		<botLeft>2</botLeft>
+		<topRight>2</topRight>
+		<botRight>1</botRight>
+	</Puzzle>
+</Puzzles>

@@ -5,11 +5,11 @@ public class LineHitPoint : MonoBehaviour {
 
 	public float lifeTime = 1f;
 
-	private Active _active;
-	private int _index;
-	private bool _hit;
-	private bool _signal = false;
-	private Timer _timer;
+	protected Active _active;
+	protected int _index;
+	protected bool _hit;
+	protected bool _signal = false;
+	protected Timer _timer;
 	
 	void Start () {
 		_hit = false;
@@ -23,17 +23,12 @@ public class LineHitPoint : MonoBehaviour {
 		} else {
 			_timer.stopStopWatch();
 		}
-		float temp = _timer.getStopWatchTime();
-		if(_timer.getStopWatchTime() >= lifeTime){
-			_signal = true;
-			switchColor(Color.green);
-			_timer.resetStopWatch();
-//			Debug.Log(_timer.getStopWatchTime());
-		}
-		colorSwitcher();
-//		checkHits();
-//		Debug.Log(getLHPIndex().ToString() + ": " + isHit());
-//		Debug.Log(_timer.getStopWatchTime().ToString("0.00"));
+//		if(_timer.getStopWatchTime() >= lifeTime){
+//			_signal = true;
+//			switchColor(Color.green);
+//			_timer.resetStopWatch();
+//		}
+//		colorSwitcher();
 	}
 
 	public void hit(bool b){
@@ -60,11 +55,11 @@ public class LineHitPoint : MonoBehaviour {
 		return _index;
 	}
 
-	private void switchColor(Color c){
+	protected void switchColor(Color c){
 		transform.renderer.material.color = c;
 	}
 
-	private void colorSwitcher(){
+	protected void colorSwitcher(){
 		if(_timer.getStopWatchTime() < lifeTime/3f)
 			switchColor(Color.green);
 		if(_timer.getStopWatchTime() >= lifeTime/3f && _timer.getStopWatchTime() <= (lifeTime * (2f/3f)))
@@ -73,7 +68,7 @@ public class LineHitPoint : MonoBehaviour {
 			switchColor(Color.red);
 	}
 
-	private void checkHits(){
+	protected void checkHits(){
 		RaycastHit[] hits = Active._hits;
 		if(hits != null && hits.Length > 0){
 			bool c = false;

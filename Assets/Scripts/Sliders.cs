@@ -8,10 +8,10 @@ public class Sliders : MonoBehaviour {
 	public float rotateSpeed = 1.0f;
 	public Vector3 limbo = new Vector3(-999f, -999f, -10);
 	
-	private bool _alive;
-	private ColorSwitcher _cSwitcher;
-	private int _numOfContactPoints = 0;
-	private List<GameObject> _contactPointObjs = new List<GameObject>();
+	protected bool _alive;
+	protected ColorSwitcher _cSwitcher;
+	protected int _numOfContactPoints = 0;
+	protected List<GameObject> _contactPointObjs = new List<GameObject>();
 		
 	void Awake () {
 		_cSwitcher = GetComponent<ColorSwitcher>();
@@ -31,15 +31,15 @@ public class Sliders : MonoBehaviour {
 	}
 	
 	void Update () {
-		slideTo(Vector3.up, slideUpwardSpeed);
-		rotate(rotateSpeed);
+//		slideTo(Vector3.up, slideUpwardSpeed);
+//		rotate(rotateSpeed);
 		if(!_alive && transform.position != limbo){
 			transform.position = limbo;
 		}
-		if(shouldDie()){
-			die();
-			resetContactPoints();
-		}
+//		if(shouldDie()){
+//			die();
+//			resetContactPoints();
+//		}
 	}
 	
 	public void spawn(Vector3 pos){
@@ -73,7 +73,7 @@ public class Sliders : MonoBehaviour {
 		return _numOfContactPoints;
 	}
 
-	private bool shouldDie(){
+	protected bool shouldDie(){
 		foreach(GameObject o in _contactPointObjs.ToArray()){
 			LineHitPoint cp = o.GetComponent<LineHitPoint>();
 			if(!cp.getSignal()){
@@ -83,18 +83,18 @@ public class Sliders : MonoBehaviour {
 		return true;	
 	}
 
-	private void resetContactPoints(){
+	protected void resetContactPoints(){
 		foreach(GameObject o in _contactPointObjs.ToArray()){
 			LineHitPoint cp = o.GetComponent<LineHitPoint>();
 			cp.resetSignal();
 		} 
 	}
 
-	private void slideTo(Vector3 dir, float speed){
+	protected void slideTo(Vector3 dir, float speed){
 		transform.Translate(dir * Time.deltaTime * speed, Space.World);
 	}
 
-	private void rotate(float speed){
+	protected void rotate(float speed){
 		transform.Rotate(Vector3.forward * speed * Time.deltaTime);
 	}
 }
